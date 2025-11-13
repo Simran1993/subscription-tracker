@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 import { useTheme } from "../contexts/ThemeContext";
 import {
   formatCurrency,
@@ -12,6 +13,7 @@ import ProgressBar from "./ProgressBar";
 
 export default function SubscriptionCard({ subscription, onPress }) {
   const { colors } = useTheme();
+  const router = useRouter();
 
   const iconColor = generateIconColor(subscription.name);
   const initials = generateIconInitials(subscription.name);
@@ -20,9 +22,17 @@ export default function SubscriptionCard({ subscription, onPress }) {
     subscription.billingCycle,
   );
 
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      router.push(`/subscription-detail/${subscription.id}`);
+    }
+  };
+
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={handlePress}
       style={{
         backgroundColor: colors.card,
         borderRadius: 16,
